@@ -371,7 +371,63 @@
     margin-left: 55px;
   }
 
-  /* ── FOOTER ── */
+  /* ── CODE EMBED ── */
+  .code-embed {
+    margin-top: 20px;
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .code-embed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #161616;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .code-embed-lang {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .copy-btn {
+    background: none;
+    border: 1px solid #333;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .copy-btn.copied { border-color: #4ade80; color: #4ade80; }
+
+  .code-embed pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #ccc;
+    white-space: pre;
+  }
+
+  /* hide download area for scripts */
+  .hide { display: none !important; }
+
+
   footer {
     border-top: 1px solid var(--border);
     padding: 24px 60px;
@@ -473,7 +529,7 @@
     <p id="detail-more">Extended information about the project.</p>
     <h3>Downloads</h3>
     <p id="detail-download-note">Click the card below to download.</p>
-    <div class="download-area">
+    <div class="download-area" id="download-area">
       <div class="bouncy-card-wrap">
         <div class="bouncy-card-inner">
           <a id="detail-download-btn" class="bouncy-card-link" href="#">
@@ -486,6 +542,15 @@
         </div>
       </div>
       <div class="bouncy-shadow"></div>
+    </div>
+
+    <!-- Code embed (scripts only) -->
+    <div class="code-embed hide" id="code-embed">
+      <div class="code-embed-header">
+        <span class="code-embed-lang" id="code-lang">python</span>
+        <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copy</button>
+      </div>
+      <pre id="code-block"></pre>
     </div>
   </div>
 </div>
@@ -517,20 +582,18 @@
     ],
     scripts: [
       {
-        title: "Script One",
-        description: "A handy script. Describe what it does here.",
-        more: "Instructions, requirements, how to run it, etc.",
-        fileName: "script-one.py",
-        fileMeta: "PY · Download",
-        downloadLink: "#"
+        title: "Prevent",
+        description: "A Hub For a Game On Roblox Game: https://www.roblox.com/games/10223837978/Meet-the-Demoncore",
+        more: "Ran Via Executor",
+        lang: "Luau",
+        code: `loadstring(game:HttpGet("https://raw.githubusercontent.com/Jelly-Open-Fortress/SloppyDemonFull/master/source"))()`
       },
       {
         title: "Script Two",
         description: "Another script. Fill this in.",
         more: "Extended info for Script Two.",
-        fileName: "script-two.bat",
-        fileMeta: "BAT · Download",
-        downloadLink: "#"
+        lang: "batch",
+        code: `@echo off\nREM Script Two\nREM Replace with your actual batch script\n\necho Hello from Script Two!\npause`
       }
     ],
     projects: [
@@ -599,13 +662,41 @@
     document.getElementById('detail-title').textContent = p.title;
     document.getElementById('detail-desc').textContent = p.description;
     document.getElementById('detail-more').textContent = p.more;
-    document.getElementById('detail-file-name').textContent = p.fileName;
-    document.getElementById('detail-file-meta').textContent = p.fileMeta;
-    document.getElementById('detail-download-btn').href = p.downloadLink;
+
+    const isScript = !!p.code;
+    const downloadArea = document.getElementById('download-area');
+    const codeEmbed = document.getElementById('code-embed');
+    const downloadNote = document.getElementById('detail-download-note');
+
+    if (isScript) {
+      downloadArea.classList.add('hide');
+      codeEmbed.classList.remove('hide');
+      downloadNote.textContent = 'Copy the code below:';
+      document.getElementById('code-lang').textContent = p.lang || 'code';
+      document.getElementById('code-block').textContent = p.code;
+    } else {
+      downloadArea.classList.remove('hide');
+      codeEmbed.classList.add('hide');
+      downloadNote.textContent = 'Click the card below to download.';
+      document.getElementById('detail-file-name').textContent = p.fileName;
+      document.getElementById('detail-file-meta').textContent = p.fileMeta;
+      document.getElementById('detail-download-btn').href = p.downloadLink;
+    }
+
     document.getElementById('main-page').style.display = 'none';
     const dp = document.getElementById('detail-page');
     dp.style.display = 'block';
     dp.scrollTop = 0;
+  }
+
+  function copyCode() {
+    const code = document.getElementById('code-block').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
   }
 
   function closePage() {
