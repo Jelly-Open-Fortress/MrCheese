@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MrCheese's Website</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111;
+    --card-bg: #161616;
+    --accent: #f97316;
+    --accent2: #fb923c;
+    --text: #e8e8e8;
+    --muted: #666;
+    --border: #222;
+    --divider: #1e1e1e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 32px 60px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  header .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+
+  header .logo span {
+    color: var(--accent);
+  }
+
+  header .tagline {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 70px 40px 100px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  /* ── PROJECTS GRID ── */
+  #projects {
+    margin-bottom: 100px;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  /* PROJECT CARD */
+  .project-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 22px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.25s, background 0.25s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card:hover {
+    border-color: #333;
+    background: #1a1a1a;
+    transform: translateY(-3px);
+  }
+
+  .card-info h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1.5px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .card-info p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .card-arrow {
+    display: block;
+    width: 28px;
+    height: 3px;
+    background: var(--accent);
+    margin-top: 20px;
+    border-radius: 2px;
+    transition: width 0.2s;
+  }
+
+  .project-card:hover .card-arrow {
+    width: 40px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 8px 18px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--divider);
+    margin: 0 0 80px;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .about-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .about-heading span {
+    color: var(--accent);
+  }
+
+  .about-body {
+    font-size: 1rem;
+    color: #aaa;
+    line-height: 1.8;
+  }
+
+  /* ── DETAIL PAGE (hidden by default) ── */
+  #detail-page {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 200;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(60px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .detail-header {
+    padding: 28px 60px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: border-color 0.2s, color 0.2s;
+    text-transform: uppercase;
+  }
+
+  .back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .detail-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+  }
+
+  .detail-content {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 40px;
+  }
+
+  .detail-content h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    margin-top: 40px;
+  }
+
+  .detail-content p {
+    color: #aaa;
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+
+  /* ── BOUNCY DOWNLOAD CARD ── */
+  @keyframes bouncy {
+    0%   { transform: translateY(0px); animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); }
+    50%  { transform: translateY(-18px); animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1); }
+    100% { transform: translateY(0px); }
+  }
+  @keyframes squish {
+    0%   { transform: scaleX(1) scaleY(1); }
+    45%  { transform: scaleX(0.94) scaleY(1.06); }
+    50%  { transform: scaleX(1) scaleY(1); }
+    55%  { transform: scaleX(0.94) scaleY(1.06); }
+    100% { transform: scaleX(1) scaleY(1); }
+  }
+  @keyframes shadow-pulse {
+    0%   { transform: scaleX(1); opacity: 0.22; }
+    50%  { transform: scaleX(0.5); opacity: 0.08; }
+    100% { transform: scaleX(1); opacity: 0.22; }
+  }
+
+  .download-area {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bouncy-card-wrap {
+    animation: bouncy 1.6s ease-in-out infinite;
+    transform-origin: center bottom;
+    will-change: transform;
+  }
+
+  .bouncy-card-inner {
+    animation: squish 1.6s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+
+  .bouncy-card-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #1a1a1a;
+    border: 1px solid #2e2e2e;
+    border-radius: 12px;
+    padding: 14px 20px;
+    width: 230px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .bouncy-card-link:hover {
+    border-color: var(--accent);
+    background: #1f1a1a;
+  }
+
+  .bouncy-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    background: rgba(249, 115, 22, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+
+  .bouncy-card-text .file-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+  }
+
+  .bouncy-card-text .file-meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .bouncy-shadow {
+    animation: shadow-pulse 1.6s ease-in-out infinite;
+    transform-origin: center;
+    width: 120px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.22;
+    margin-top: 8px;
+    margin-left: 55px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .project-card:nth-child(1) { animation-delay: 0.05s; }
+  .project-card:nth-child(2) { animation-delay: 0.12s; }
+  .project-card:nth-child(3) { animation-delay: 0.19s; }
+  .project-card:nth-child(4) { animation-delay: 0.26s; }
+
+  @media (max-width: 700px) {
+    header { padding: 24px 24px; }
+    main { padding: 50px 20px 80px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    #about { grid-template-columns: 1fr; gap: 24px; }
+    .detail-header { padding: 24px; }
+    footer { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div>
+    <div class="logo">Mr<span>Cheese</span></div>
+    <div class="tagline">// personal site</div>
+  </div>
+</header>
+
+<!-- ── MAIN PAGE ── -->
+<div id="main-page">
+  <main>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="section-label">// projects &amp; stuff</div>
+      <div class="tabs" id="tabs">
+        <button class="tab-btn active" onclick="switchTab('files', this)">Files</button>
+        <button class="tab-btn" onclick="switchTab('scripts', this)">Scripts</button>
+        <button class="tab-btn" onclick="switchTab('projects', this)">Projects</button>
+      </div>
+      <div class="projects-grid" id="projects-grid">
+        <!-- Cards injected by JS -->
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div>
+        <div class="section-label">// about</div>
+        <div class="about-heading">A Little<br>About <span>Me</span></div>
+      </div>
+      <div class="about-body" id="about-text">
+        Hey! I'm MrCheese. This is my personal site where I share my projects, downloads, and whatever else I'm working on. Feel free to poke around — click any card above to see more info and grab downloads.
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>MrCheese &copy; 2026</span>
+    <span>made with 🧀</span>
+  </footer>
+</div>
+
+<!-- ── DETAIL PAGE ── -->
+<div id="detail-page">
+  <div class="detail-header">
+    <button class="back-btn" onclick="closePage()">← Back</button>
+    <div class="detail-title" id="detail-title">Project Title</div>
+  </div>
+  <div class="detail-content">
+    <p id="detail-desc">Description goes here.</p>
+    <h3>More Info</h3>
+    <p id="detail-more">Extended information about the project.</p>
+    <h3>Downloads</h3>
+    <p id="detail-download-note">Click the card below to download.</p>
+    <div class="download-area">
+      <div class="bouncy-card-wrap">
+        <div class="bouncy-card-inner">
+          <a id="detail-download-btn" class="bouncy-card-link" href="#">
+            <div class="bouncy-icon">📦</div>
+            <div class="bouncy-card-text">
+              <div class="file-name" id="detail-file-name">download</div>
+              <div class="file-meta" id="detail-file-meta">Click to download</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="bouncy-shadow"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── EASY TO EDIT: About section text ──
+  const aboutText = `Hey! I'm MrCheese. This is my personal site where I share my projects, downloads, and whatever else I'm working on. Feel free to poke around — click any card above to see more info and grab downloads.`;
+  document.getElementById('about-text').textContent = aboutText;
+
+  // ── EASY TO EDIT: Add/remove/change projects per tab ──
+  const allProjects = {
+    files: [
+      {
+        title: "File One",
+        description: "A file you can download. Change this description.",
+        more: "More details about this file — version info, what it does, etc.",
+        fileName: "file-one.zip",
+        fileMeta: "ZIP · Download",
+        downloadLink: "#"
+      },
+      {
+        title: "File Two",
+        description: "Another downloadable file. Replace with your content.",
+        more: "Extended info for File Two.",
+        fileName: "file-two.zip",
+        fileMeta: "ZIP · Download",
+        downloadLink: "#"
+      }
+    ],
+    scripts: [
+      {
+        title: "Script One",
+        description: "A handy script. Describe what it does here.",
+        more: "Instructions, requirements, how to run it, etc.",
+        fileName: "script-one.py",
+        fileMeta: "PY · Download",
+        downloadLink: "#"
+      },
+      {
+        title: "Script Two",
+        description: "Another script. Fill this in.",
+        more: "Extended info for Script Two.",
+        fileName: "script-two.bat",
+        fileMeta: "BAT · Download",
+        downloadLink: "#"
+      }
+    ],
+    projects: [
+      {
+        title: "Project One",
+        description: "A short description of what this project does. Change this to whatever you want.",
+        more: "This is the extended info section. You can add as much text as you want here.",
+        fileName: "project-one.zip",
+        fileMeta: "ZIP · Download",
+        downloadLink: "#"
+      },
+      {
+        title: "Project Two",
+        description: "Another cool thing I made. Replace this description with something useful.",
+        more: "More details about Project Two.",
+        fileName: "project-two.exe",
+        fileMeta: "EXE · Download",
+        downloadLink: "#"
+      },
+      {
+        title: "Project Three",
+        description: "Yet another project. Fill this in with your actual content.",
+        more: "Extended info for Project Three.",
+        fileName: "project-three.zip",
+        fileMeta: "ZIP · Download",
+        downloadLink: "#"
+      }
+    ]
+  };
+
+  let currentTab = 'files';
+
+  function renderGrid(tab) {
+    const grid = document.getElementById('projects-grid');
+    grid.innerHTML = '';
+    allProjects[tab].forEach((p, i) => {
+      const card = document.createElement('a');
+      card.className = 'project-card fade-up';
+      card.href = '#';
+      card.style.animationDelay = (i * 0.07) + 's';
+      card.innerHTML = `
+        <div class="card-info">
+          <h2>${p.title}</h2>
+          <p>${p.description}</p>
+        </div>
+        <div class="card-arrow"></div>
+      `;
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        openPage(p);
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  function switchTab(tab, btn) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGrid(tab);
+  }
+
+  renderGrid('files');
+
+  function openPage(p) {
+    document.getElementById('detail-title').textContent = p.title;
+    document.getElementById('detail-desc').textContent = p.description;
+    document.getElementById('detail-more').textContent = p.more;
+    document.getElementById('detail-file-name').textContent = p.fileName;
+    document.getElementById('detail-file-meta').textContent = p.fileMeta;
+    document.getElementById('detail-download-btn').href = p.downloadLink;
+    document.getElementById('main-page').style.display = 'none';
+    const dp = document.getElementById('detail-page');
+    dp.style.display = 'block';
+    dp.scrollTop = 0;
+  }
+
+  function closePage() {
+    document.getElementById('detail-page').style.display = 'none';
+    document.getElementById('main-page').style.display = 'block';
+  }
+</script>
+</body>
+</html>
